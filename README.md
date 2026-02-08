@@ -1,5 +1,5 @@
-Version 1.0.1
-A Pacman / Yay Package Manager Wrapper
+### Version 1.0.1
+**A Pacman / Yay Package Manager Wrapper**
 
 Features:
 Pacman Install/Remove/Upgrade

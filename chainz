@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+Version="chainz 1.0 (Chainz Launch!)"
+cmd="$1"
+pkg="$2"
+
+#Notes Script
+if [[ "$cmd" == "-N" ]]; then
+	echo "This is a restart for chainz and will lose all features below are the ones being kept:"
+	echo "Install from Pacman / yay"
+	echo "remove from Pacman / yay"
+	echo "Upgrade from Pacman / yay"
+	exit 0
+fi
+
+#Version Script
+if [[ "$cmd" == "--version" ]]; then
+	echo "$Version"
+	exit 0 
+fi
+
+#Help Script
+if [[ "$cmd" == "-H" ]]; then
+	echo "Chainz $Version"
+	echo "chainz -I {Package}   --> Installs Packages"
+	echo "chainz -IY {Package}  --> Installs yay Packages"
+	echo "chainz -RM {Package}  --> Removes Packages"
+	echo "chainz -U             --> Upgrades System"
+	echo "chainz --version      --> Prints Version"
+	echo "chainz -N             --> Prints Chainz Update Notes"
+	exit 0
+fi
+
+#Upgrade Script
+if [[ "$cmd" == "-U" ]]; then
+	echo "=== Chainz Full System Upgrade ==="
+	echo
+	echo "===     Upgrading Packages     ==="
+	yay -Syu --noconfirm
+	echo
+	echo "===    System Upgrade Done     ==="
+fi
+
+#Remove Script
+if [[ "$cmd" == "-RM" ]]; then
+	if [[ -z "$pkg"	]];  then
+		echo "Error: No package specified."
+		echo "Usage: chainz -RM {package}"
+		exit 0
+	fi
+
+	echo "===      Removing Package      ==="
+	yay -R "$pkg" --noconfirm
+	echo "===      Package Removed       ==="
+fi
+
+#Install Pacman Script
+if [[ "$cmd" == "-I" ]]; then
+	if [[ -z "$pkg" ]]; then
+		echo "Error: No package specified."
+		echo "Usage: chainz -I {package}"
+		exit 0
+	fi
+	echo "===   Chainz Package Install   ==="
+	if ! sudo pacman -S "$pkg" --noconfirm; then
+	echo "Failed to install '$pkg' with Pacman"
+	exit 1
+	fi
+	echo "===     Package Installed      ==="
+fi
+
+#Instal Yay Script
+if [[ "$cmd" == "-IY" ]]; then
+	if [[ -z "$pkg" ]]; then
+		echo "Error: No package specified."
+		echo "Usage:chainz -IY {package}"
+		exit 0
+	fi
+	echo "=== Chainz Yay Package Install ==="
+	if ! yay -S "$pkg" --noconfirm; then
+		echo "Failed to install '$pkg' with Yay"
+		exit 0
+		fi
+		echo "=== Yay Package Installed ==="
+		exit 0
+fi

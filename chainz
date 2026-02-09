@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-Version="chainz 1.0.1 (Minor Update)
-Chainz: Blue Metal"
+Version="chainz 1.0.2 (Minor Update)
+Chainz: Blue Fish"
 cmd="$1"
 pkg="$2"
 
 #Notes Script
 if [[ "$cmd" == "-N" ]]; then
-	echo "Changing -RM function to -R to remove packages"
+	echo "=== Chainz Notes ==="
+	echo "Fixed missing space in -R function of 'help'"
+	echo "Moved around the 'help' page to be more ascetically pleasing"
+	echo "Added --help to print 'help'"
+	echo "When not running any functions will upgrade"
 	exit 0
 fi
 
@@ -18,25 +22,26 @@ if [[ "$cmd" == "--version" ]]; then
 fi
 
 #Help Script
-if [[ "$cmd" == "-H" ]]; then
+if [[ "$cmd" == "-H" || "$cmd" == "--help" ]]; then
 	echo "Chainz $Version"
+	echo "chainz --version      --> Prints Version"
+	echo "chainz --help         --> Prints Help"
 	echo "chainz -I {Package}   --> Installs Packages"
 	echo "chainz -IY {Package}  --> Installs yay Packages"
-	echo "chainz -R {Package}  --> Removes Packages"
-	echo "chainz -U             --> Upgrades System"
-	echo "chainz --version      --> Prints Version"
+	echo "chainz -R {Package}   --> Removes Packages"
 	echo "chainz -N             --> Prints Chainz Update Notes"
+	echo "chainz -U             --> Upgrades System"
 	exit 0
 fi
 
 #Upgrade Script
-if [[ "$cmd" == "-U" ]]; then
-	echo "=== Chainz Full System Upgrade ==="
-	echo
-	echo "===     Upgrading Packages     ==="
-	yay -Syu --noconfirm
-	echo
-	echo "===    System Upgrade Done     ==="
+if [[ -z "$cmd" || "$cmd" == "-U" ]]; then
+    echo "=== Chainz Full System Upgrade ==="
+    echo
+    echo "===     Upgrading Packages     ==="
+    yay -Syu --noconfirm
+    echo
+    echo "===    System Upgrade Done     ==="
 fi
 
 #Remove Script

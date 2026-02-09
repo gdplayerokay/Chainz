@@ -35,7 +35,7 @@ if [[ "$cmd" == "-H" || "$cmd" == "--help" ]]; then
 fi
 
 #Upgrade Script
-if [[ -z "$cmd" || "$cmd" == "-U" ]]; then
+if [[ "$cmd" == "-U" ]]; then
     echo "=== Chainz Full System Upgrade ==="
     echo
     echo "===     Upgrading Packages     ==="

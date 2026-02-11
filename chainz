@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-Version="Chainz-PKG 1.1.0 (Minor/Developer Update)
-Chainz: Red Bar"
+Version="
+Chainz-PKG 1.2.0 (Major Update)
+Chainz: Red Metal
+"
 
 cmd="$1"
 pkg="$2"
 
 case "$cmd" in
 
-    -N)
+    --notes|-N)
         echo "=== Chainz Notes ==="
-        echo "Updated to 'case' instead of 'if' statements"
-        echo "Added -V flag to print version"
-        echo "Made 'help' more readable"
+        echo "Added full flatpak support"
+	echo "Added 'future' flag"
+	echo "added '--notes' flag to print notes"
         exit 0
         ;;
 
@@ -21,14 +23,25 @@ case "$cmd" in
         exit 0
         ;;
 
-    -H|--help)
+    --future|-F)
+        echo "=== Chainz Future ==="
+        echo "Full search support for flatpak, pacman and yay"
+	echo "Search for all package managers"
+	echo "Interactive mode"
+        exit 0
+        ;;
+
+    --help|-H)
         echo "Chainz $Version"
         echo "chainz --version | -V --> Prints Version"
         echo "chainz --help | -H    --> Prints Help"
+        echo "chainz --future | -F  --> Prints the next chainz update"
+        echo "chainz --notes | -N   --> Prints Chainz Update Notes"
         echo "chainz -I {Package}   --> Installs Packages"
         echo "chainz -IY {Package}  --> Installs yay Packages"
+        echo "chainz -IF {package}  --> Installs Flatpak Packages"
+        echo "chainz -RF {package}  --> Removes Flatpak Packages"
         echo "chainz -R {Package}   --> Removes Packages"
-        echo "chainz -N             --> Prints Chainz Update Notes"
         echo "chainz -U             --> Upgrades System"
         exit 0
         ;;
@@ -38,7 +51,7 @@ case "$cmd" in
         echo
         echo "===     Upgrading Packages     ==="
         yay -Syu --noconfirm
-        echo
+       echo
         echo "===    System Upgrade Done     ==="
         exit 0
         ;;
@@ -53,6 +66,19 @@ case "$cmd" in
         echo "===      Removing Package      ==="
         yay -R "$pkg" --noconfirm
         echo "===      Package Removed       ==="
+        exit 0
+        ;;
+
+    -RF)
+        if [[ -z "$pkg" ]]; then
+            echo "Error: No package specified."
+            echo "Usage: chainz -RF {package}"
+            exit 1
+        fi
+
+        echo "===  Removing Flatpak Package  ==="
+        flatpak remove -y "$pkg"
+        echo "===   Flatpak Package Removed  ==="
         exit 0
         ;;
 
@@ -84,7 +110,23 @@ case "$cmd" in
             echo "Failed to install '$pkg' with Yay"
             exit 1
         fi
-        echo "=== Yay Package Installed ==="
+        echo "===   Yay Package Installed    ==="
+        exit 0
+        ;;
+    -IF)
+        if [[ -z "$pkg" ]]; then
+        echo "Error: No package specified."
+        echo "Usage: chainz -IF {package}"
+        exit 1
+        fi
+
+        echo "===   Chainz Flatpak Install   ==="
+        if ! flatpak install -y "$pkg"; then
+        echo "Failed to install '$pkg' with Flatpak"
+        exit 1
+        fi
+
+        echo "=== Flatpak Package Installed  ==="
         exit 0
         ;;
 
